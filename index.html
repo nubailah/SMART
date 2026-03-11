@@ -131,7 +131,10 @@ Student ID
 <p><b>Class:</b> <span id="class"></span></p>
 
 <table>
-
+<td id="assess1"></td>
+<td id="assess2"></td>
+<td id="assess3"></td>
+<td id="assess4"></td>
 <tr>
 <th>Assessment</th>
 <th>Max</th>
@@ -227,7 +230,7 @@ Total Actual Mark: <span id="totalActual">0</span>
 </div>
 
 <script>
-
+<button onclick="saveTarget()">Save Target</button>
 var url="https://script.google.com/macros/s/AKfycbxfO99A_tHZJyARWczXoa4FVgf28t5I5LOApuhTNgwTqgfutp0gzVqjs1KnnjPRnJu4kA/exec";
 
 function openTab(tab,el){
@@ -265,7 +268,28 @@ total+=res
 document.getElementById("totalTarget").innerText=total.toFixed(2)
 
 }
+function calcActual(){
 
+let total=0
+
+for(let i=1;i<=4;i++){
+
+let actual=document.getElementById("actualA"+i).innerText
+let max=document.getElementById("maxA"+i).innerText
+let weight=document.getElementById("perA"+i).innerText
+
+let res=(actual/max)*weight
+
+if(!isNaN(res)){
+document.getElementById("actualResA"+i).innerText=res.toFixed(2)
+total+=res
+}
+
+}
+
+document.getElementById("totalActual").innerText=total.toFixed(2)
+
+}
 function loadStudent(){
 
 var id=document.getElementById("studentID").value
@@ -275,7 +299,14 @@ fetch(url+"?id="+id)
 .then(res=>res.json())
 
 .then(data=>{
-
+document.getElementById("assess1").innerText=data[3]
+document.getElementById("assess2").innerText=data[8]
+document.getElementById("assess3").innerText=data[13]
+document.getElementById("assess4").innerText=data[18]
+  document.getElementById("actualA1").innerText=data[7]
+document.getElementById("actualA2").innerText=data[12]
+document.getElementById("actualA3").innerText=data[17]
+document.getElementById("actualA4").innerText=data[22]
 document.getElementById("name").innerText=data[0]
 document.getElementById("class").innerText=data[2]
 
@@ -294,7 +325,7 @@ document.getElementById("perA4").innerText=data[21]
 })
 
 }
-
+calcActual()
 </script>
 
 </body>
