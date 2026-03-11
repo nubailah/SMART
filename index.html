@@ -51,7 +51,7 @@ Student ID: <input id="studentID">
 
 <table>
 <tr>
-<th>Assessment</th><th>Max</th><th>Weight</th><th>Target Mark</th><th>Percentage</th>
+<th>Assessment</th><th>Max</th><th>Weight</th><th>Target Mark</th><th>Target %</th>
 </tr>
 <tr><td id="assess1">-</td><td id="maxA1"></td><td id="perA1"></td><td><input id="targetA1" oninput="calcTarget()"></td><td id="resA1"></td></tr>
 <tr><td id="assess2">-</td><td id="maxA2"></td><td id="perA2"></td><td><input id="targetA2" oninput="calcTarget()"></td><td id="resA2"></td></tr>
@@ -86,7 +86,7 @@ Total Target Marks: <span id="totalTargetComp">0</span> | Total Target %: <span 
 </div>
 
 <script>
-var url="https://script.google.com/macros/s/AKfycbzf8bGCRitr1Zq99fOERMfKaqz72gIeVDqDrSFexBiTfV_uocQLn8J_gnZAoRPSw4Dt4w/exec"; // gantikan dengan URL Web App
+var url="https://script.google.com/macros/s/AKfycbzxhmSYp9FVzO_YrwyZCgr9fxdUrd8ez2rPTz4SzLa_e4Ud4Y280xWYZ9P063b5-lIIPQ/exec"; // gantikan dengan Web App URL
 
 function openTab(tab,el){
   document.querySelectorAll(".tabcontent").forEach(x=>x.style.display="none")
@@ -153,8 +153,8 @@ function loadStudent(){
     .then(res=>res.json())
     .then(data=>{
       if(data.length==0){alert("Incorrect ID");return;}
-      document.getElementById("name").innerText=data[1]; // name
-      document.getElementById("class").innerText=data[0]; // class
+      document.getElementById("name").innerText=data[1]; // B
+      document.getElementById("class").innerText=data[0]; // A
 
       // assessment names
       document.getElementById("assess1").innerText=data[3]; // D
@@ -163,18 +163,18 @@ function loadStudent(){
       document.getElementById("assess4").innerText=data[18]; // S
 
       // max & weight
-      document.getElementById("maxA1").innerText=data[4]; document.getElementById("perA1").innerText=data[5];
-      document.getElementById("maxA2").innerText=data[9]; document.getElementById("perA2").innerText=data[10];
-      document.getElementById("maxA3").innerText=data[14]; document.getElementById("perA3").innerText=data[15];
-      document.getElementById("maxA4").innerText=data[19]; document.getElementById("perA4").innerText=data[20];
+      document.getElementById("maxA1").innerText=data[5]; document.getElementById("perA1").innerText=data[6];
+      document.getElementById("maxA2").innerText=data[10]; document.getElementById("perA2").innerText=data[11];
+      document.getElementById("maxA3").innerText=data[15]; document.getElementById("perA3").innerText=data[16];
+      document.getElementById("maxA4").innerText=data[20]; document.getElementById("perA4").innerText=data[21];
 
       // actual marks
-      document.getElementById("actualA1").innerText=data[6];
-      document.getElementById("actualA2").innerText=data[11];
-      document.getElementById("actualA3").innerText=data[16];
-      document.getElementById("actualA4").innerText=data[21];
+      document.getElementById("actualA1").innerText=data[7];
+      document.getElementById("actualA2").innerText=data[12];
+      document.getElementById("actualA3").innerText=data[17];
+      document.getElementById("actualA4").innerText=data[22];
 
-      // target marks
+      // default target = target marks
       document.getElementById("targetA1").value=data[4];
       document.getElementById("targetA2").value=data[9];
       document.getElementById("targetA3").value=data[14];
