@@ -140,8 +140,8 @@ function loadStudent(){
     .then(res=>res.json())
     .then(data=>{
       if(data.length==0){clearAll();alert("ID not found");return;}
-      document.getElementById("name").innerText=data[0];
-      document.getElementById("class").innerText=data[1];
+      document.getElementById("name").innerText=data[2];
+      document.getElementById("class").innerText=data[0];
       let assessCols=[3,8,13,18]; // D,I,N,S
       let maxCols=[5,10,15,20]; // F,K,P,U
       let weightCols=[6,11,16,21]; // G,L,Q,V
