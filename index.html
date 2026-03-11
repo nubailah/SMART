@@ -1,331 +1,280 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <style>
-
 body{
-font-family:Arial;
-background:linear-gradient(135deg,#5f6bdc,#8b5bbf);
-margin:0;
-padding:40px;
+  font-family:Arial;
+  background:linear-gradient(135deg,#5f6bdc,#8b5bbf);
+  margin:0;
+  padding:40px;
 }
 
 .header{
-color:white;
-margin-bottom:20px;
+  color:white;
+  margin-bottom:20px;
 }
-
 .header h1{
-margin:0;
+  margin:0;
 }
-
 .container{
-max-width:1100px;
-margin:auto;
+  max-width:1100px;
+  margin:auto;
 }
-
 .card{
-background:white;
-padding:25px;
-border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  background:white;
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
 }
-
 .tabs{
-display:flex;
-gap:10px;
-margin-bottom:20px;
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
 }
-
 .tab{
-padding:10px 20px;
-background:#eee;
-cursor:pointer;
-border-radius:8px;
+  padding:10px 20px;
+  background:#eee;
+  cursor:pointer;
+  border-radius:8px;
 }
-
 .tab.active{
-background:#4b5bdc;
-color:white;
+  background:#4b5bdc;
+  color:white;
 }
-
 .tabcontent{
-display:none;
+  display:none;
 }
-
 .form-group{
-margin-bottom:10px;
+  margin-bottom:10px;
 }
-
 input{
-padding:10px;
-border-radius:6px;
-border:1px solid #ccc;
+  padding:10px;
+  border-radius:6px;
+  border:1px solid #ccc;
 }
-
 button{
-background:#4b5bdc;
-color:white;
-border:none;
-padding:10px 16px;
-border-radius:6px;
-cursor:pointer;
+  background:#4b5bdc;
+  color:white;
+  border:none;
+  padding:10px 16px;
+  border-radius:6px;
+  cursor:pointer;
 }
-
 table{
-width:100%;
-border-collapse:collapse;
-margin-top:20px;
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
 }
-
 th{
-background:#f3f4f7;
+  background:#f3f4f7;
 }
-
 th,td{
-border:1px solid #ddd;
-padding:10px;
-text-align:center;
+  border:1px solid #ddd;
+  padding:10px;
+  text-align:center;
 }
-
 .totalbox{
-margin-top:15px;
-font-size:18px;
-font-weight:bold;
+  margin-top:15px;
+  font-size:18px;
+  font-weight:bold;
 }
-
 </style>
-
 </head>
-
 <body>
 
 <div class="header">
-<h1>SMARTGrade Planner System</h1>
-<p>Student Target vs Actual Assessment Analyzer</p>
+  <h1>SMARTGrade Planner System</h1>
+  <p>Student Target vs Actual Assessment Analyzer</p>
 </div>
 
 <div class="container">
+  <div class="card">
 
-<div class="card">
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active" onclick="openTab('planner',this)">Student Planner</div>
+      <div class="tab" onclick="openTab('compare',this)">Result Comparison</div>
+    </div>
 
-<div class="tabs">
+    <!-- Planner Tab -->
+    <div id="planner" class="tabcontent" style="display:block">
+      <div class="form-group">
+        Student ID  
+        <input id="studentID">
+        <button onclick="loadStudent()">Load Student</button>
+      </div>
 
-<div class="tab active" onclick="openTab('planner',this)">Student Planner</div>
-<div class="tab" onclick="openTab('compare',this)">Result Comparison</div>
+      <p><b>Name:</b> <span id="name"></span></p>
+      <p><b>Class:</b> <span id="class"></span></p>
 
-</div>
+      <table>
+        <tr>
+          <td id="assess1"></td>
+          <td id="assess2"></td>
+          <td id="assess3"></td>
+          <td id="assess4"></td>
+        </tr>
+        <tr>
+          <th>Assessment</th>
+          <th>Max</th>
+          <th>Weight</th>
+          <th>Target Mark</th>
+          <th>Contribution</th>
+        </tr>
+        <tr>
+          <td>A1</td>
+          <td id="maxA1"></td>
+          <td id="perA1"></td>
+          <td><input id="targetA1" oninput="calcTarget()"></td>
+          <td id="resA1"></td>
+        </tr>
+        <tr>
+          <td>A2</td>
+          <td id="maxA2"></td>
+          <td id="perA2"></td>
+          <td><input id="targetA2" oninput="calcTarget()"></td>
+          <td id="resA2"></td>
+        </tr>
+        <tr>
+          <td>A3</td>
+          <td id="maxA3"></td>
+          <td id="perA3"></td>
+          <td><input id="targetA3" oninput="calcTarget()"></td>
+          <td id="resA3"></td>
+        </tr>
+        <tr>
+          <td>A4</td>
+          <td id="maxA4"></td>
+          <td id="perA4"></td>
+          <td><input id="targetA4" oninput="calcTarget()"></td>
+          <td id="resA4"></td>
+        </tr>
+      </table>
 
-<div id="planner" class="tabcontent" style="display:block">
+      <div class="totalbox">
+        Total Target Mark: <span id="totalTarget">0</span>
+      </div>
 
-<div class="form-group">
-Student ID  
-<input id="studentID">
-<button onclick="loadStudent()">Load Student</button>
-</div>
+      <button onclick="saveTarget()">Save Target</button>
+    </div>
 
-<p><b>Name:</b> <span id="name"></span></p>
-<p><b>Class:</b> <span id="class"></span></p>
+    <!-- Comparison Tab -->
+    <div id="compare" class="tabcontent">
+      <table>
+        <tr>
+          <th>Assessment</th>
+          <th>Actual Mark</th>
+          <th>Contribution</th>
+        </tr>
+        <tr>
+          <td>A1</td>
+          <td id="actualA1"></td>
+          <td id="actualResA1"></td>
+        </tr>
+        <tr>
+          <td>A2</td>
+          <td id="actualA2"></td>
+          <td id="actualResA2"></td>
+        </tr>
+        <tr>
+          <td>A3</td>
+          <td id="actualA3"></td>
+          <td id="actualResA3"></td>
+        </tr>
+        <tr>
+          <td>A4</td>
+          <td id="actualA4"></td>
+          <td id="actualResA4"></td>
+        </tr>
+      </table>
 
-<table>
-<td id="assess1"></td>
-<td id="assess2"></td>
-<td id="assess3"></td>
-<td id="assess4"></td>
-<tr>
-<th>Assessment</th>
-<th>Max</th>
-<th>Weight</th>
-<th>Target Mark</th>
-<th>Contribution</th>
-</tr>
+      <div class="totalbox">
+        Total Actual Mark: <span id="totalActual">0</span>
+      </div>
+    </div>
 
-<tr>
-<td>A1</td>
-<td id="maxA1"></td>
-<td id="perA1"></td>
-<td><input id="targetA1" oninput="calcTarget()"></td>
-<td id="resA1"></td>
-</tr>
-
-<tr>
-<td>A2</td>
-<td id="maxA2"></td>
-<td id="perA2"></td>
-<td><input id="targetA2" oninput="calcTarget()"></td>
-<td id="resA2"></td>
-</tr>
-
-<tr>
-<td>A3</td>
-<td id="maxA3"></td>
-<td id="perA3"></td>
-<td><input id="targetA3" oninput="calcTarget()"></td>
-<td id="resA3"></td>
-</tr>
-
-<tr>
-<td>A4</td>
-<td id="maxA4"></td>
-<td id="perA4"></td>
-<td><input id="targetA4" oninput="calcTarget()"></td>
-<td id="resA4"></td>
-</tr>
-
-</table>
-
-<div class="totalbox">
-Total Target Mark: <span id="totalTarget">0</span>
-</div>
-
-</div>
-
-<div id="compare" class="tabcontent">
-
-<table>
-
-<tr>
-<th>Assessment</th>
-<th>Actual Mark</th>
-<th>Contribution</th>
-</tr>
-
-<tr>
-<td>A1</td>
-<td id="actualA1"></td>
-<td id="actualResA1"></td>
-</tr>
-
-<tr>
-<td>A2</td>
-<td id="actualA2"></td>
-<td id="actualResA2"></td>
-</tr>
-
-<tr>
-<td>A3</td>
-<td id="actualA3"></td>
-<td id="actualResA3"></td>
-</tr>
-
-<tr>
-<td>A4</td>
-<td id="actualA4"></td>
-<td id="actualResA4"></td>
-</tr>
-
-</table>
-
-<div class="totalbox">
-Total Actual Mark: <span id="totalActual">0</span>
-</div>
-
-</div>
-
-</div>
-
+  </div>
 </div>
 
 <script>
-<button onclick="saveTarget()">Save Target</button>
+// Google Apps Script URL
 var url="https://script.google.com/macros/s/AKfycbxfO99A_tHZJyARWczXoa4FVgf28t5I5LOApuhTNgwTqgfutp0gzVqjs1KnnjPRnJu4kA/exec";
 
+// Tabs function
 function openTab(tab,el){
-
-document.querySelectorAll(".tabcontent").forEach(x=>x.style.display="none")
-document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"))
-
-document.getElementById(tab).style.display="block"
-el.classList.add("active")
-
+  document.querySelectorAll(".tabcontent").forEach(x=>x.style.display="none");
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.getElementById(tab).style.display="block";
+  el.classList.add("active");
 }
 
+// Calculate target contribution
 function calcTarget(){
-
-let total=0
-
-for(let i=1;i<=4;i++){
-
-let target=document.getElementById("targetA"+i).value
-let max=document.getElementById("maxA"+i).innerText
-let weight=document.getElementById("perA"+i).innerText
-
-let res=(target/max)*weight
-
-if(!isNaN(res)){
-
-document.getElementById("resA"+i).innerText=res.toFixed(2)
-
-total+=res
-
+  let total=0;
+  for(let i=1;i<=4;i++){
+    let target = parseFloat(document.getElementById("targetA"+i).value) || 0;
+    let max = parseFloat(document.getElementById("maxA"+i).innerText) || 0;
+    let weight = parseFloat(document.getElementById("perA"+i).innerText) || 0;
+    let res = max > 0 ? (target/max)*weight : 0;
+    document.getElementById("resA"+i).innerText = res.toFixed(2);
+    total += res;
+  }
+  document.getElementById("totalTarget").innerText = total.toFixed(2);
 }
 
-}
-
-document.getElementById("totalTarget").innerText=total.toFixed(2)
-
-}
+// Calculate actual contribution
 function calcActual(){
-
-let total=0
-
-for(let i=1;i<=4;i++){
-
-let actual=document.getElementById("actualA"+i).innerText
-let max=document.getElementById("maxA"+i).innerText
-let weight=document.getElementById("perA"+i).innerText
-
-let res=(actual/max)*weight
-
-if(!isNaN(res)){
-document.getElementById("actualResA"+i).innerText=res.toFixed(2)
-total+=res
+  let total=0;
+  for(let i=1;i<=4;i++){
+    let actual = parseFloat(document.getElementById("actualA"+i).innerText) || 0;
+    let max = parseFloat(document.getElementById("maxA"+i).innerText) || 0;
+    let weight = parseFloat(document.getElementById("perA"+i).innerText) || 0;
+    let res = max > 0 ? (actual/max)*weight : 0;
+    document.getElementById("actualResA"+i).innerText = res.toFixed(2);
+    total += res;
+  }
+  document.getElementById("totalActual").innerText = total.toFixed(2);
 }
 
-}
-
-document.getElementById("totalActual").innerText=total.toFixed(2)
-
-}
+// Load student data from Google Sheet
 function loadStudent(){
+  var id = document.getElementById("studentID").value;
+  fetch(url + "?id=" + id)
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("assess1").innerText = data[3];
+    document.getElementById("assess2").innerText = data[8];
+    document.getElementById("assess3").innerText = data[13];
+    document.getElementById("assess4").innerText = data[18];
 
-var id=document.getElementById("studentID").value
+    document.getElementById("actualA1").innerText = data[7];
+    document.getElementById("actualA2").innerText = data[12];
+    document.getElementById("actualA3").innerText = data[17];
+    document.getElementById("actualA4").innerText = data[22];
 
-fetch(url+"?id="+id)
+    document.getElementById("name").innerText = data[0];
+    document.getElementById("class").innerText = data[2];
 
-.then(res=>res.json())
+    document.getElementById("maxA1").innerText = data[5];
+    document.getElementById("perA1").innerText = data[6];
+    document.getElementById("maxA2").innerText = data[10];
+    document.getElementById("perA2").innerText = data[11];
+    document.getElementById("maxA3").innerText = data[15];
+    document.getElementById("perA3").innerText = data[16];
+    document.getElementById("maxA4").innerText = data[20];
+    document.getElementById("perA4").innerText = data[21];
 
-.then(data=>{
-document.getElementById("assess1").innerText=data[3]
-document.getElementById("assess2").innerText=data[8]
-document.getElementById("assess3").innerText=data[13]
-document.getElementById("assess4").innerText=data[18]
-  document.getElementById("actualA1").innerText=data[7]
-document.getElementById("actualA2").innerText=data[12]
-document.getElementById("actualA3").innerText=data[17]
-document.getElementById("actualA4").innerText=data[22]
-document.getElementById("name").innerText=data[0]
-document.getElementById("class").innerText=data[2]
-
-document.getElementById("maxA1").innerText=data[5]
-document.getElementById("perA1").innerText=data[6]
-
-document.getElementById("maxA2").innerText=data[10]
-document.getElementById("perA2").innerText=data[11]
-
-document.getElementById("maxA3").innerText=data[15]
-document.getElementById("perA3").innerText=data[16]
-
-document.getElementById("maxA4").innerText=data[20]
-document.getElementById("perA4").innerText=data[21]
-
-})
-
+    // Recalculate actual marks after data is loaded
+    calcActual();
+  })
+  .catch(err => alert("Failed to load student data. Check the Google Sheet URL and permissions."));
 }
-calcActual()
+
+// Save target function (optional, implement as needed)
+function saveTarget(){
+  alert("Save target function not implemented yet!");
+}
 </script>
 
 </body>
