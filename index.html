@@ -206,7 +206,64 @@ total+=res
 document.getElementById("totalTarget").innerText=total.toFixed(2)
 
 }
+  
+function loadStudent(){
 
+var id=document.getElementById("studentID").value
+
+fetch(url+"?id="+id)
+
+.then(res=>res.json())
+
+.then(data=>{
+
+document.getElementById("name").innerText=data[0]
+document.getElementById("class").innerText=data[2]
+
+document.getElementById("maxA1").innerText=data[5]
+document.getElementById("perA1").innerText=data[6]
+
+document.getElementById("maxA2").innerText=data[10]
+document.getElementById("perA2").innerText=data[11]
+
+document.getElementById("maxA3").innerText=data[15]
+document.getElementById("perA3").innerText=data[16]
+
+document.getElementById("maxA4").innerText=data[20]
+document.getElementById("perA4").innerText=data[21]
+
+})
+
+}
+function saveTarget(){
+
+var data={
+
+id:document.getElementById("studentID").value,
+
+A1:document.getElementById("targetA1").value,
+
+A2:document.getElementById("targetA2").value,
+
+A3:document.getElementById("targetA3").value,
+
+A4:document.getElementById("targetA4").value
+
+}
+
+fetch(url,{
+
+method:"POST",
+
+body:JSON.stringify(data)
+
+})
+
+.then(res=>res.text())
+
+.then(res=>alert("Saved"))
+
+}  
 </script>
 
 </body>
