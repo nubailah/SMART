@@ -12,12 +12,15 @@ body{font-family:Arial;background:linear-gradient(135deg,#5f6bdc,#8b5bbf);margin
 .tab{padding:10px 20px;background:#eee;cursor:pointer;border-radius:8px;}
 .tab.active{background:#4b5bdc;color:white;}
 .tabcontent{display:none;}
+.form-group{margin-bottom:10px;}
 input{padding:10px;border-radius:6px;border:1px solid #ccc;}
 button{background:#4b5bdc;color:white;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;}
 table{width:100%;border-collapse:collapse;margin-top:20px;}
 th{background:#f3f4f7;}
 th,td{border:1px solid #ddd;padding:10px;text-align:center;}
 .totalbox{margin-top:15px;font-size:18px;font-weight:bold;}
+.correct{background-color:#c8e6c9;}
+.wrong{background-color:#ffcdd2;}
 </style>
 </head>
 <body>
@@ -29,61 +32,51 @@ th,td{border:1px solid #ddd;padding:10px;text-align:center;}
 
 <div class="container">
 <div class="card">
-
 <div class="tabs">
 <div class="tab active" onclick="openTab('planner',this)">Student Planner</div>
 <div class="tab" onclick="openTab('compare',this)">Result Comparison</div>
 </div>
 
-<!-- STUDENT PLANNER -->
+<!-- Planner Tab -->
 <div id="planner" class="tabcontent" style="display:block">
-<div>
-Student ID <input id="studentID">
+<div class="form-group">
+Student ID  
+<input id="studentID">
 <button onclick="loadStudent()">Load Student</button>
+<button onclick="saveTarget()">Save Target</button>
 </div>
 
 <p><b>Name:</b> <span id="name"></span></p>
 <p><b>Class:</b> <span id="class"></span></p>
 
 <table>
-<tr><th>Assessment</th><th>Max</th><th>Weight</th><th>Target Mark</th></tr>
-<tr><td id="nameA1"></td><td id="maxA1"></td><td id="perA1"></td><td><input id="targetA1" oninput="updateComparison()"></td></tr>
-<tr><td id="nameA2"></td><td id="maxA2"></td><td id="perA2"></td><td><input id="targetA2" oninput="updateComparison()"></td></tr>
-<tr><td id="nameA3"></td><td id="maxA3"></td><td id="perA3"></td><td><input id="targetA3" oninput="updateComparison()"></td></tr>
-<tr><td id="nameA4"></td><td id="maxA4"></td><td id="perA4"></td><td><input id="targetA4" oninput="updateComparison()"></td></tr>
+<tr>
+<th>Assessment</th><th>Max</th><th>Weight</th><th>Target Mark</th><th>Percentage</th>
+</tr>
+<tr><td id="assess1">A1</td><td id="maxA1"></td><td id="perA1"></td><td><input id="targetA1" oninput="calcTarget()"></td><td id="resA1"></td></tr>
+<tr><td id="assess2">A2</td><td id="maxA2"></td><td id="perA2"></td><td><input id="targetA2" oninput="calcTarget()"></td><td id="resA2"></td></tr>
+<tr><td id="assess3">A3</td><td id="maxA3"></td><td id="perA3"></td><td><input id="targetA3" oninput="calcTarget()"></td><td id="resA3"></td></tr>
+<tr><td id="assess4">A4</td><td id="maxA4"></td><td id="perA4"></td><td><input id="targetA4" oninput="calcTarget()"></td><td id="resA4"></td></tr>
 </table>
 
 <div class="totalbox">
-Total Target Mark: <span id="totalTargetMark">0</span>
+Total Target Marks: <span id="totalTarget">0</span> | Total Percentage: <span id="totalTargetPct">0</span>%
+</div>
 </div>
 
-<button onclick="saveTarget()">Save Target</button>
-</div>
-
-<!-- RESULT COMPARISON -->
+<!-- Compare Tab -->
 <div id="compare" class="tabcontent">
 <table>
-<tr>
-<th>Assessment</th>
-<th>Target Mark</th>
-<th>Target %</th>
-<th>Actual Mark</th>
-<th>Actual %</th>
-</tr>
-<tr><td id="compA1"></td><td id="compTargetMarkA1"></td><td id="compTargetPercA1"></td><td id="actualMarkA1"></td><td id="actualPercA1"></td></tr>
-<tr><td id="compA2"></td><td id="compTargetMarkA2"></td><td id="compTargetPercA2"></td><td id="actualMarkA2"></td><td id="actualPercA2"></td></tr>
-<tr><td id="compA3"></td><td id="compTargetMarkA3"></td><td id="compTargetPercA3"></td><td id="actualMarkA3"></td><td id="actualPercA3"></td></tr>
-<tr><td id="compA4"></td><td id="compTargetMarkA4"></td><td id="compTargetPercA4"></td><td id="actualMarkA4"></td><td id="actualPercA4"></td></tr>
+<tr><th>Assessment</th><th>Actual Mark</th><th>Actual %</th><th>Target Mark</th><th>Target %</th></tr>
+<tr><td id="cA1">A1</td><td id="actualA1"></td><td id="actualPctA1"></td><td id="targetCompA1"></td><td id="targetPctA1"></td></tr>
+<tr><td id="cA2">A2</td><td id="actualA2"></td><td id="actualPctA2"></td><td id="targetCompA2"></td><td id="targetPctA2"></td></tr>
+<tr><td id="cA3">A3</td><td id="actualA3"></td><td id="actualPctA3"></td><td id="targetCompA3"></td><td id="targetPctA3"></td></tr>
+<tr><td id="cA4">A4</td><td id="actualA4"></td><td id="actualPctA4"></td><td id="targetCompA4"></td><td id="targetPctA4"></td></tr>
 </table>
 
 <div class="totalbox">
-Total Target Mark: <span id="totalCompTargetMark">0</span>
-<br>
-Total Target %: <span id="totalCompTargetPerc">0</span>%
-<br>
-Total Actual Mark: <span id="totalCompActualMark">0</span>
-<br>
-Total Actual %: <span id="totalCompActualPerc">0</span>%
+Total Actual Marks: <span id="totalActual">0</span> | Total Actual %: <span id="totalActualPct">0</span> <br>
+Total Target Marks: <span id="totalTargetComp">0</span> | Total Target %: <span id="totalTargetCompPct">0</span>
 </div>
 </div>
 
@@ -91,94 +84,110 @@ Total Actual %: <span id="totalCompActualPerc">0</span>%
 </div>
 
 <script>
-var url="https://script.google.com/macros/s/AKfycbzfuo_oyOxEvZBj2Eal1Wji4VFAVSR4jEkHrYkOD2B4FxQ-MTSRQDOsU4OzF6AVcFJ1hw/exec";
+var url="https://script.google.com/macros/s/AKfycbz_M8DrdDTrMgVdCl1LJQeki4Yi2xQQh7ShmN2TkGoeaoUunSWtgx3LCmTtLNArZnP9mw/exec";
 
 function openTab(tab,el){
-document.querySelectorAll(".tabcontent").forEach(x=>x.style.display="none");
-document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-document.getElementById(tab).style.display="block";
-el.classList.add("active");
+  document.querySelectorAll(".tabcontent").forEach(x=>x.style.display="none")
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"))
+  document.getElementById(tab).style.display="block"
+  el.classList.add("active")
 }
 
-function updateComparison(){
-let totalTargetMark=0,totalTargetPerc=0,totalActualMark=0,totalActualPerc=0;
-for(let i=1;i<=4;i++){
-  let target=parseFloat(document.getElementById("targetA"+i).value)||0;
-  let max=parseFloat(document.getElementById("maxA"+i).innerText)||0;
-  let weight=parseFloat(document.getElementById("perA"+i).innerText)||0;
-  let actual=parseFloat(document.getElementById("actualMarkA"+i).innerText)||0;
-
-  // Correct percentage calculation
-  let targetPerc = max>0 ? (target/max)*100 : 0;
-  let actualPerc = max>0 ? (actual/max)*100 : 0;
-
-  totalTargetMark += target;
-  totalActualMark += actual;
-
-  // Result Comparison tab
-  document.getElementById("compA"+i).innerText = document.getElementById("nameA"+i).innerText;
-  document.getElementById("compTargetMarkA"+i).innerText = target.toFixed(2);
-  document.getElementById("compTargetPercA"+i).innerText = targetPerc.toFixed(2);
-  document.getElementById("actualMarkA"+i).innerText = actual.toFixed(2);
-  document.getElementById("actualPercA"+i).innerText = actualPerc.toFixed(2);
-
-  // color-code
-  document.getElementById("actualPercA"+i).style.backgroundColor = actualPerc>=targetPerc?"#c8e6c9":"#ffcdd2";
-
-  totalTargetPerc += targetPerc;
-  totalActualPerc += actualPerc;
+function calcTarget(){
+  let total=0, totalPct=0;
+  for(let i=1;i<=4;i++){
+    let target=parseFloat(document.getElementById("targetA"+i).value)||0;
+    let max=parseFloat(document.getElementById("maxA"+i).innerText)||0;
+    let weight=parseFloat(document.getElementById("perA"+i).innerText)||0;
+    let pct = (target/max*weight*100)||0;
+    document.getElementById("resA"+i).innerText=pct.toFixed(2);
+    total+=target;
+    totalPct+=pct;
+  }
+  document.getElementById("totalTarget").innerText=total.toFixed(2);
+  document.getElementById("totalTargetPct").innerText=totalPct.toFixed(2);
 }
 
-document.getElementById("totalTargetMark").innerText = totalTargetMark.toFixed(2);
-document.getElementById("totalCompTargetMark").innerText = totalTargetMark.toFixed(2);
-document.getElementById("totalCompTargetPerc").innerText = totalTargetPerc.toFixed(2);
-document.getElementById("totalCompActualMark").innerText = totalActualMark.toFixed(2);
-document.getElementById("totalCompActualPerc").innerText = totalActualPerc.toFixed(2);
+function calcActual(){
+  let totalActual=0,totalActualPct=0;
+  for(let i=1;i<=4;i++){
+    let actual=parseFloat(document.getElementById("actualA"+i).innerText)||0;
+    let max=parseFloat(document.getElementById("maxA"+i).innerText)||0;
+    let weight=parseFloat(document.getElementById("perA"+i).innerText)||0;
+    let pct=(actual/max*weight*100)||0;
+    document.getElementById("actualPctA"+i).innerText=pct.toFixed(2);
+    totalActual+=actual;
+    totalActualPct+=pct;
+  }
+  document.getElementById("totalActual").innerText=totalActual.toFixed(2);
+  document.getElementById("totalActualPct").innerText=totalActualPct.toFixed(2);
 }
 
 function loadStudent(){
-var id=document.getElementById("studentID").value;
-fetch(url+"?id="+id)
-.then(res=>res.json())
-.then(data=>{
-if(!data || data.length==0){alert("Incorrect ID!"); return;}
-document.getElementById("name").innerText=data[0];
-document.getElementById("class").innerText=data[2];
+  var id=document.getElementById("studentID").value;
+  fetch(url+"?id="+id)
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.length==0){
+        alert("Incorrect ID");
+        return;
+      }
+      document.getElementById("name").innerText=data[2]; // adjust columns if needed
+      document.getElementById("class").innerText=data[3];
 
-let arrName=[data[3],data[8],data[13],data[18]];
-let arrMax=[data[5],data[10],data[15],data[20]];
-let arrWeight=[data[6],data[11],data[16],data[21]];
-let arrActual=[data[7],data[12],data[17],data[22]];
+      document.getElementById("maxA1").innerText=data[5];
+      document.getElementById("perA1").innerText=data[6];
+      document.getElementById("maxA2").innerText=data[10];
+      document.getElementById("perA2").innerText=data[11];
+      document.getElementById("maxA3").innerText=data[15];
+      document.getElementById("perA3").innerText=data[16];
+      document.getElementById("maxA4").innerText=data[20];
+      document.getElementById("perA4").innerText=data[21];
 
-for(let i=1;i<=4;i++){
-  document.getElementById("nameA"+i).innerText=arrName[i-1];
-  document.getElementById("maxA"+i).innerText=arrMax[i-1];
-  document.getElementById("perA"+i).innerText=arrWeight[i-1];
-  document.getElementById("actualMarkA"+i).innerText=arrActual[i-1];
-}
-updateComparison();
-})
-.catch(err=>alert("Failed to load student data. Check Web App URL and permissions."));
+      document.getElementById("actualA1").innerText=data[7];
+      document.getElementById("actualA2").innerText=data[12];
+      document.getElementById("actualA3").innerText=data[17];
+      document.getElementById("actualA4").innerText=data[22];
+
+      document.getElementById("targetA1").value=data[4];
+      document.getElementById("targetA2").value=data[9];
+      document.getElementById("targetA3").value=data[14];
+      document.getElementById("targetA4").value=data[19];
+
+      // Compare Tab
+      for(let i=1;i<=4;i++){
+        document.getElementById("targetCompA"+i).innerText=document.getElementById("targetA"+i).value;
+        let max=parseFloat(document.getElementById("maxA"+i).innerText)||1;
+        let weight=parseFloat(document.getElementById("perA"+i).innerText)||0;
+        document.getElementById("targetPctA"+i).innerText=(document.getElementById("targetA"+i).value/max*weight*100).toFixed(2);
+        document.getElementById("actualPctA"+i).innerText=(parseFloat(document.getElementById("actualA"+i).innerText)/max*weight*100).toFixed(2);
+      }
+
+      calcTarget();
+      calcActual();
+    });
 }
 
 function saveTarget(){
-var id=document.getElementById("studentID").value;
-if(!id){alert("Enter Student ID!"); return;}
-var payload={
-id:id,
-targetA1:document.getElementById("targetA1").value,
-targetA2:document.getElementById("targetA2").value,
-targetA3:document.getElementById("targetA3").value,
-targetA4:document.getElementById("targetA4").value
-};
-fetch(url,{method:"POST",body:JSON.stringify(payload),headers:{"Content-Type":"application/json"}})
-.then(res=>res.json())
-.then(data=>{
-if(data.ok){alert("Target marks saved successfully!"); updateComparison();}
-else{alert("Error: "+data.message);}
-})
-.catch(err=>alert("Failed to save target marks. Check network or Web App permissions."));
+  var payload={
+    id:document.getElementById("studentID").value,
+    targetA1:document.getElementById("targetA1").value,
+    targetA2:document.getElementById("targetA2").value,
+    targetA3:document.getElementById("targetA3").value,
+    targetA4:document.getElementById("targetA4").value
+  };
+  fetch(url,{
+    method:"POST",
+    body:JSON.stringify(payload)
+  })
+  .then(res=>res.json())
+  .then(resp=>{
+    if(resp.ok) alert("Saved successfully");
+    else alert("Failed to save: "+resp.message);
+  })
+  .catch(err=>alert("Failed to save: "+err.message));
 }
 </script>
+
 </body>
 </html>
