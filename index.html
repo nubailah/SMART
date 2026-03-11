@@ -108,12 +108,12 @@ for(let i=1;i<=4;i++){
   let weight=parseFloat(document.getElementById("perA"+i).innerText)||0;
   let actual=parseFloat(document.getElementById("actualMarkA"+i).innerText)||0;
 
-  // Percentage formula
-  let targetPerc = max>0 ? (target/max)*weight*100 : 0;
-  let actualPerc = max>0 ? (actual/max)*weight*100 : 0;
+  // Correct percentage calculation
+  let targetPerc = max>0 ? (target/max)*100 : 0;
+  let actualPerc = max>0 ? (actual/max)*100 : 0;
 
-  // Student Planner total = sum of target marks
   totalTargetMark += target;
+  totalActualMark += actual;
 
   // Result Comparison tab
   document.getElementById("compA"+i).innerText = document.getElementById("nameA"+i).innerText;
@@ -122,16 +122,13 @@ for(let i=1;i<=4;i++){
   document.getElementById("actualMarkA"+i).innerText = actual.toFixed(2);
   document.getElementById("actualPercA"+i).innerText = actualPerc.toFixed(2);
 
-  // color-code actual %
+  // color-code
   document.getElementById("actualPercA"+i).style.backgroundColor = actualPerc>=targetPerc?"#c8e6c9":"#ffcdd2";
 
-  // totals for comparison tab
   totalTargetPerc += targetPerc;
-  totalActualMark += actual;
   totalActualPerc += actualPerc;
 }
 
-// Update totals
 document.getElementById("totalTargetMark").innerText = totalTargetMark.toFixed(2);
 document.getElementById("totalCompTargetMark").innerText = totalTargetMark.toFixed(2);
 document.getElementById("totalCompTargetPerc").innerText = totalTargetPerc.toFixed(2);
