@@ -13,8 +13,8 @@ body{font-family:Arial;background:linear-gradient(135deg,#5f6bdc,#8b5bbf);margin
 .tab.active{background:#4b5bdc;color:white;}
 .tabcontent{display:none;}
 .form-group{margin-bottom:10px;}
-input{padding:10px;border-radius:6px;border:1px solid #ccc;}
-button{background:#4b5bdc;color:white;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;}
+input{padding:10px;border-radius:6px;border:1px solid #ccc;width:80px;}
+button{background:#4b5bdc;color:white;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;margin-left:5px;}
 table{width:100%;border-collapse:collapse;margin-top:20px;}
 th{background:#f3f4f7;}
 th,td{border:1px solid #ddd;padding:10px;text-align:center;}
@@ -32,16 +32,16 @@ th,td{border:1px solid #ddd;padding:10px;text-align:center;}
 
 <div class="container">
 <div class="card">
+
 <div class="tabs">
 <div class="tab active" onclick="openTab('planner',this)">Student Planner</div>
 <div class="tab" onclick="openTab('compare',this)">Result Comparison</div>
 </div>
 
-<!-- Planner Tab -->
+<!-- Student Planner Tab -->
 <div id="planner" class="tabcontent" style="display:block">
 <div class="form-group">
-Student ID  
-<input id="studentID">
+Student ID: <input id="studentID">
 <button onclick="loadStudent()">Load Student</button>
 <button onclick="saveTarget()">Save Target</button>
 </div>
@@ -53,29 +53,31 @@ Student ID
 <tr>
 <th>Assessment</th><th>Max</th><th>Weight</th><th>Target Mark</th><th>Percentage</th>
 </tr>
-<tr><td id="assess1">A1</td><td id="maxA1"></td><td id="perA1"></td><td><input id="targetA1" oninput="calcTarget()"></td><td id="resA1"></td></tr>
-<tr><td id="assess2">A2</td><td id="maxA2"></td><td id="perA2"></td><td><input id="targetA2" oninput="calcTarget()"></td><td id="resA2"></td></tr>
-<tr><td id="assess3">A3</td><td id="maxA3"></td><td id="perA3"></td><td><input id="targetA3" oninput="calcTarget()"></td><td id="resA3"></td></tr>
-<tr><td id="assess4">A4</td><td id="maxA4"></td><td id="perA4"></td><td><input id="targetA4" oninput="calcTarget()"></td><td id="resA4"></td></tr>
+<tr><td id="assess1">-</td><td id="maxA1"></td><td id="perA1"></td><td><input id="targetA1" oninput="calcTarget()"></td><td id="resA1"></td></tr>
+<tr><td id="assess2">-</td><td id="maxA2"></td><td id="perA2"></td><td><input id="targetA2" oninput="calcTarget()"></td><td id="resA2"></td></tr>
+<tr><td id="assess3">-</td><td id="maxA3"></td><td id="perA3"></td><td><input id="targetA3" oninput="calcTarget()"></td><td id="resA3"></td></tr>
+<tr><td id="assess4">-</td><td id="maxA4"></td><td id="perA4"></td><td><input id="targetA4" oninput="calcTarget()"></td><td id="resA4"></td></tr>
 </table>
 
 <div class="totalbox">
-Total Target Marks: <span id="totalTarget">0</span> | Total Percentage: <span id="totalTargetPct">0</span>%
+Total Target Marks: <span id="totalTarget">0</span> | Total Target %: <span id="totalTargetPct">0</span>%
 </div>
 </div>
 
-<!-- Compare Tab -->
+<!-- Result Comparison Tab -->
 <div id="compare" class="tabcontent">
 <table>
-<tr><th>Assessment</th><th>Actual Mark</th><th>Actual %</th><th>Target Mark</th><th>Target %</th></tr>
-<tr><td id="cA1">A1</td><td id="actualA1"></td><td id="actualPctA1"></td><td id="targetCompA1"></td><td id="targetPctA1"></td></tr>
-<tr><td id="cA2">A2</td><td id="actualA2"></td><td id="actualPctA2"></td><td id="targetCompA2"></td><td id="targetPctA2"></td></tr>
-<tr><td id="cA3">A3</td><td id="actualA3"></td><td id="actualPctA3"></td><td id="targetCompA3"></td><td id="targetPctA3"></td></tr>
-<tr><td id="cA4">A4</td><td id="actualA4"></td><td id="actualPctA4"></td><td id="targetCompA4"></td><td id="targetPctA4"></td></tr>
+<tr>
+<th>Assessment</th><th>Actual Mark</th><th>Actual %</th><th>Target Mark</th><th>Target %</th>
+</tr>
+<tr><td id="cA1">-</td><td id="actualA1"></td><td id="actualPctA1"></td><td id="targetCompA1"></td><td id="targetPctA1"></td></tr>
+<tr><td id="cA2">-</td><td id="actualA2"></td><td id="actualPctA2"></td><td id="targetCompA2"></td><td id="targetPctA2"></td></tr>
+<tr><td id="cA3">-</td><td id="actualA3"></td><td id="actualPctA3"></td><td id="targetCompA3"></td><td id="targetPctA3"></td></tr>
+<tr><td id="cA4">-</td><td id="actualA4"></td><td id="actualPctA4"></td><td id="targetCompA4"></td><td id="targetPctA4"></td></tr>
 </table>
 
 <div class="totalbox">
-Total Actual Marks: <span id="totalActual">0</span> | Total Actual %: <span id="totalActualPct">0</span> <br>
+Total Actual Marks: <span id="totalActual">0</span> | Total Actual %: <span id="totalActualPct">0</span><br>
 Total Target Marks: <span id="totalTargetComp">0</span> | Total Target %: <span id="totalTargetCompPct">0</span>
 </div>
 </div>
@@ -84,7 +86,7 @@ Total Target Marks: <span id="totalTargetComp">0</span> | Total Target %: <span 
 </div>
 
 <script>
-var url="https://script.google.com/macros/s/AKfycby2hq0DKXQNVjCPzKplHZJ0rKiRIkdKFxdAszLLreVOZv42_1j7bQ1TwqwNyLqS5-pyqQ/exec";
+var url="YOUR_WEB_APP_URL"; // gantikan dengan URL Web App
 
 function openTab(tab,el){
   document.querySelectorAll(".tabcontent").forEach(x=>x.style.display="none")
@@ -94,15 +96,15 @@ function openTab(tab,el){
 }
 
 function calcTarget(){
-  let total=0, totalPct=0;
+  let total=0,totalPct=0;
   for(let i=1;i<=4;i++){
     let target=parseFloat(document.getElementById("targetA"+i).value)||0;
-    let max=parseFloat(document.getElementById("maxA"+i).innerText)||0;
+    let max=parseFloat(document.getElementById("maxA"+i).innerText)||1;
     let weight=parseFloat(document.getElementById("perA"+i).innerText)||0;
-    let pct = (target/max*weight*100)||0;
-    document.getElementById("resA"+i).innerText=pct.toFixed(2);
+    let pct = (target/max*weight);
+    document.getElementById("resA"+i).innerText=(pct*100).toFixed(2);
     total+=target;
-    totalPct+=pct;
+    totalPct+=pct*100;
   }
   document.getElementById("totalTarget").innerText=total.toFixed(2);
   document.getElementById("totalTargetPct").innerText=totalPct.toFixed(2);
@@ -112,13 +114,35 @@ function calcActual(){
   let totalActual=0,totalActualPct=0;
   for(let i=1;i<=4;i++){
     let actual=parseFloat(document.getElementById("actualA"+i).innerText)||0;
-    let max=parseFloat(document.getElementById("maxA"+i).innerText)||0;
+    let target=parseFloat(document.getElementById("targetA"+i).value)||0;
+    let max=parseFloat(document.getElementById("maxA"+i).innerText)||1;
     let weight=parseFloat(document.getElementById("perA"+i).innerText)||0;
-    let pct=(actual/max*weight*100)||0;
-    document.getElementById("actualPctA"+i).innerText=pct.toFixed(2);
-    totalActual+=actual;
-    totalActualPct+=pct;
+    let actualPct=(actual/max*weight);
+    let targetPct=(target/max*weight);
+
+    document.getElementById("actualPctA"+i).innerText=(actualPct*100).toFixed(2);
+    document.getElementById("targetPctA"+i).innerText=(targetPct*100).toFixed(2);
+
+    // color-code
+    document.getElementById("actualPctA"+i).className=(actualPct>=targetPct)?"correct":"wrong";
+
+    document.getElementById("targetCompA"+i).innerText=target.toFixed(2);
   }
+
+  // totals
+  let totalTarget=0,totalTargetPct=0,totalActual=0,totalActualPct=0;
+  for(let i=1;i<=4;i++){
+    let target=parseFloat(document.getElementById("targetA"+i).value)||0;
+    let actual=parseFloat(document.getElementById("actualA"+i).innerText)||0;
+    let max=parseFloat(document.getElementById("maxA"+i).innerText)||1;
+    let weight=parseFloat(document.getElementById("perA"+i).innerText)||0;
+    totalTarget+=target;
+    totalTargetPct+=target/max*weight*100;
+    totalActual+=actual;
+    totalActualPct+=actual/max*weight*100;
+  }
+  document.getElementById("totalTargetComp").innerText=totalTarget.toFixed(2);
+  document.getElementById("totalTargetCompPct").innerText=totalTargetPct.toFixed(2);
   document.getElementById("totalActual").innerText=totalActual.toFixed(2);
   document.getElementById("totalActualPct").innerText=totalActualPct.toFixed(2);
 }
@@ -128,40 +152,33 @@ function loadStudent(){
   fetch(url+"?id="+id)
     .then(res=>res.json())
     .then(data=>{
-      if(data.length==0){
-        alert("Incorrect ID");
-        return;
-      }
-      document.getElementById("name").innerText=data[2]; // adjust columns if needed
-      document.getElementById("class").innerText=data[3];
+      if(data.length==0){alert("Incorrect ID");return;}
+      document.getElementById("name").innerText=data[1]; // name
+      document.getElementById("class").innerText=data[0]; // class
 
-      document.getElementById("maxA1").innerText=data[5];
-      document.getElementById("perA1").innerText=data[6];
-      document.getElementById("maxA2").innerText=data[10];
-      document.getElementById("perA2").innerText=data[11];
-      document.getElementById("maxA3").innerText=data[15];
-      document.getElementById("perA3").innerText=data[16];
-      document.getElementById("maxA4").innerText=data[20];
-      document.getElementById("perA4").innerText=data[21];
+      // assessment names
+      document.getElementById("assess1").innerText=data[3]; // D
+      document.getElementById("assess2").innerText=data[8]; // I
+      document.getElementById("assess3").innerText=data[13]; // N
+      document.getElementById("assess4").innerText=data[18]; // S
 
-      document.getElementById("actualA1").innerText=data[7];
-      document.getElementById("actualA2").innerText=data[12];
-      document.getElementById("actualA3").innerText=data[17];
-      document.getElementById("actualA4").innerText=data[22];
+      // max & weight
+      document.getElementById("maxA1").innerText=data[4]; document.getElementById("perA1").innerText=data[5];
+      document.getElementById("maxA2").innerText=data[9]; document.getElementById("perA2").innerText=data[10];
+      document.getElementById("maxA3").innerText=data[14]; document.getElementById("perA3").innerText=data[15];
+      document.getElementById("maxA4").innerText=data[19]; document.getElementById("perA4").innerText=data[20];
 
+      // actual marks
+      document.getElementById("actualA1").innerText=data[6];
+      document.getElementById("actualA2").innerText=data[11];
+      document.getElementById("actualA3").innerText=data[16];
+      document.getElementById("actualA4").innerText=data[21];
+
+      // target marks
       document.getElementById("targetA1").value=data[4];
       document.getElementById("targetA2").value=data[9];
       document.getElementById("targetA3").value=data[14];
       document.getElementById("targetA4").value=data[19];
-
-      // Compare Tab
-      for(let i=1;i<=4;i++){
-        document.getElementById("targetCompA"+i).innerText=document.getElementById("targetA"+i).value;
-        let max=parseFloat(document.getElementById("maxA"+i).innerText)||1;
-        let weight=parseFloat(document.getElementById("perA"+i).innerText)||0;
-        document.getElementById("targetPctA"+i).innerText=(document.getElementById("targetA"+i).value/max*weight*100).toFixed(2);
-        document.getElementById("actualPctA"+i).innerText=(parseFloat(document.getElementById("actualA"+i).innerText)/max*weight*100).toFixed(2);
-      }
 
       calcTarget();
       calcActual();
@@ -176,18 +193,11 @@ function saveTarget(){
     targetA3:document.getElementById("targetA3").value,
     targetA4:document.getElementById("targetA4").value
   };
-  fetch(url,{
-    method:"POST",
-    body:JSON.stringify(payload)
-  })
-  .then(res=>res.json())
-  .then(resp=>{
-    if(resp.ok) alert("Saved successfully");
-    else alert("Failed to save: "+resp.message);
-  })
-  .catch(err=>alert("Failed to save: "+err.message));
+  fetch(url,{method:"POST",body:JSON.stringify(payload)})
+    .then(res=>res.json())
+    .then(resp=>{if(resp.ok) alert("Saved successfully");else alert("Failed: "+resp.message);})
+    .catch(err=>alert("Failed: "+err.message));
 }
 </script>
-
 </body>
 </html>
