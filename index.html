@@ -35,6 +35,7 @@ th,td{border:1px solid #ddd;padding:10px;text-align:center;}
 <div class="tab" onclick="openTab('compare',this)">Result Comparison</div>
 </div>
 
+<!-- STUDENT PLANNER -->
 <div id="planner" class="tabcontent" style="display:block">
 <div>
 Student ID <input id="studentID">
@@ -45,37 +46,44 @@ Student ID <input id="studentID">
 <p><b>Class:</b> <span id="class"></span></p>
 
 <table>
-<tr><th>Assessment</th><th>Max</th><th>Weight</th><th>Target Mark</th><th>Percentage</th></tr>
-<tr><td id="nameA1"></td><td id="maxA1"></td><td id="perA1"></td><td><input id="targetA1" oninput="updateComparison()"></td><td id="resA1"></td></tr>
-<tr><td id="nameA2"></td><td id="maxA2"></td><td id="perA2"></td><td><input id="targetA2" oninput="updateComparison()"></td><td id="resA2"></td></tr>
-<tr><td id="nameA3"></td><td id="maxA3"></td><td id="perA3"></td><td><input id="targetA3" oninput="updateComparison()"></td><td id="resA3"></td></tr>
-<tr><td id="nameA4"></td><td id="maxA4"></td><td id="perA4"></td><td><input id="targetA4" oninput="updateComparison()"></td><td id="resA4"></td></tr>
+<tr><th>Assessment</th><th>Max</th><th>Weight</th><th>Target Mark</th></tr>
+<tr><td id="nameA1"></td><td id="maxA1"></td><td id="perA1"></td><td><input id="targetA1" oninput="updateComparison()"></td></tr>
+<tr><td id="nameA2"></td><td id="maxA2"></td><td id="perA2"></td><td><input id="targetA2" oninput="updateComparison()"></td></tr>
+<tr><td id="nameA3"></td><td id="maxA3"></td><td id="perA3"></td><td><input id="targetA3" oninput="updateComparison()"></td></tr>
+<tr><td id="nameA4"></td><td id="maxA4"></td><td id="perA4"></td><td><input id="targetA4" oninput="updateComparison()"></td></tr>
 </table>
 
 <div class="totalbox">
-Total Target %: <span id="totalTarget">0</span>%
+Total Target Mark: <span id="totalTargetMark">0</span>
 </div>
 
 <button onclick="saveTarget()">Save Target</button>
 </div>
 
+<!-- RESULT COMPARISON -->
 <div id="compare" class="tabcontent">
 <table>
-<tr><th>Assessment</th><th>Target %</th><th>Target Mark</th><th>Actual %</th><th>Actual Mark</th></tr>
-<tr><td id="compA1"></td><td id="compTargetA1"></td><td id="compTargetMarkA1"></td><td id="actualA1"></td><td id="actualMarkA1"></td></tr>
-<tr><td id="compA2"></td><td id="compTargetA2"></td><td id="compTargetMarkA2"></td><td id="actualA2"></td><td id="actualMarkA2"></td></tr>
-<tr><td id="compA3"></td><td id="compTargetA3"></td><td id="compTargetMarkA3"></td><td id="actualA3"></td><td id="actualMarkA3"></td></tr>
-<tr><td id="compA4"></td><td id="compTargetA4"></td><td id="compTargetMarkA4"></td><td id="actualA4"></td><td id="actualMarkA4"></td></tr>
+<tr>
+<th>Assessment</th>
+<th>Target Mark</th>
+<th>Target %</th>
+<th>Actual Mark</th>
+<th>Actual %</th>
+</tr>
+<tr><td id="compA1"></td><td id="compTargetMarkA1"></td><td id="compTargetPercA1"></td><td id="actualMarkA1"></td><td id="actualPercA1"></td></tr>
+<tr><td id="compA2"></td><td id="compTargetMarkA2"></td><td id="compTargetPercA2"></td><td id="actualMarkA2"></td><td id="actualPercA2"></td></tr>
+<tr><td id="compA3"></td><td id="compTargetMarkA3"></td><td id="compTargetPercA3"></td><td id="actualMarkA3"></td><td id="actualPercA3"></td></tr>
+<tr><td id="compA4"></td><td id="compTargetMarkA4"></td><td id="compTargetPercA4"></td><td id="actualMarkA4"></td><td id="actualPercA4"></td></tr>
 </table>
 
 <div class="totalbox">
-Total Target %: <span id="totalCompTarget">0</span>%
+Total Target Mark: <span id="totalCompTargetMark">0</span>
 <br>
-Total Target Mark: <span id="totalTargetMark">0</span>
+Total Target %: <span id="totalCompTargetPerc">0</span>%
 <br>
-Total Actual %: <span id="totalCompActual">0</span>%
+Total Actual Mark: <span id="totalCompActualMark">0</span>
 <br>
-Total Actual Mark: <span id="totalActualMark">0</span>
+Total Actual %: <span id="totalCompActualPerc">0</span>%
 </div>
 </div>
 
@@ -83,7 +91,7 @@ Total Actual Mark: <span id="totalActualMark">0</span>
 </div>
 
 <script>
-var url="https://script.google.com/macros/s/AKfycbyLDkhdPSP-8gz0YhGSr6SuB4Dk5SCBN5TTLG31clNDCPUBu7SFszM5wgj26gWvdt1t6Q/exec"; // ganti dengan Web App URL
+var url="https://script.google.com/macros/s/AKfycbyLDkhdPSP-8gz0YhGSr6SuB4Dk5SCBN5TTLG31clNDCPUBu7SFszM5wgj26gWvdt1t6Q/exec";
 
 function openTab(tab,el){
 document.querySelectorAll(".tabcontent").forEach(x=>x.style.display="none");
@@ -93,40 +101,42 @@ el.classList.add("active");
 }
 
 function updateComparison(){
-let totalTargetPerc=0,totalTargetMark=0,totalActualPerc=0,totalActualMark=0;
+let totalTargetMark=0,totalTargetPerc=0,totalActualMark=0,totalActualPerc=0;
+
 for(let i=1;i<=4;i++){
   let target=parseFloat(document.getElementById("targetA"+i).value)||0;
   let max=parseFloat(document.getElementById("maxA"+i).innerText)||0;
   let weight=parseFloat(document.getElementById("perA"+i).innerText)||0;
-  let actual=parseFloat(document.getElementById("actualMarkA"+i).innerText)||parseFloat(document.getElementById("actualA"+i).innerText)||0;
+  let actual=parseFloat(document.getElementById("actualMarkA"+i).innerText)||0;
 
-  let targetPerc=max>0?(target/max)*weight:0;
-  let actualPerc=max>0?(actual/max)*weight:0;
+  let targetPerc=max>0?(target/max)*weight*100:0;
+  let actualPerc=max>0?(actual/max)*weight*100:0;
 
-  document.getElementById("resA"+i).innerText=targetPerc.toFixed(2);
-
-  // Comparison tab
-  document.getElementById("compA"+i).innerText=document.getElementById("nameA"+i).innerText;
-  document.getElementById("compTargetA"+i).innerText=targetPerc.toFixed(2);
-  document.getElementById("compTargetMarkA"+i).innerText=target.toFixed(2);
-  document.getElementById("actualA"+i).innerText=actualPerc.toFixed(2);
-  document.getElementById("actualMarkA"+i).innerText=actual.toFixed(2);
-
-  // color code
-  document.getElementById("actualA"+i).style.backgroundColor=actualPerc>=targetPerc?"#c8e6c9":"#ffcdd2";
-
-  totalTargetPerc+=targetPerc;
+  // Update Student Planner total
   totalTargetMark+=target;
-  totalActualPerc+=actualPerc;
+
+  // Update Comparison Tab
+  document.getElementById("compA"+i).innerText=document.getElementById("nameA"+i).innerText;
+  document.getElementById("compTargetMarkA"+i).innerText=target.toFixed(2);
+  document.getElementById("compTargetPercA"+i).innerText=targetPerc.toFixed(2);
+  document.getElementById("actualMarkA"+i).innerText=actual.toFixed(2);
+  document.getElementById("actualPercA"+i).innerText=actualPerc.toFixed(2);
+
+  // color-code
+  document.getElementById("actualPercA"+i).style.backgroundColor=actualPerc>=targetPerc?"#c8e6c9":"#ffcdd2";
+
+  // totals
+  totalTargetPerc+=targetPerc;
   totalActualMark+=actual;
+  totalActualPerc+=actualPerc;
 }
 
 // Update totals
-document.getElementById("totalTarget").innerText=totalTargetPerc.toFixed(2);
-document.getElementById("totalCompTarget").innerText=totalTargetPerc.toFixed(2);
 document.getElementById("totalTargetMark").innerText=totalTargetMark.toFixed(2);
-document.getElementById("totalCompActual").innerText=totalActualPerc.toFixed(2);
-document.getElementById("totalActualMark").innerText=totalActualMark.toFixed(2);
+document.getElementById("totalCompTargetMark").innerText=totalTargetMark.toFixed(2);
+document.getElementById("totalCompTargetPerc").innerText=totalTargetPerc.toFixed(2);
+document.getElementById("totalCompActualMark").innerText=totalActualMark.toFixed(2);
+document.getElementById("totalCompActualPerc").innerText=totalActualPerc.toFixed(2);
 }
 
 function loadStudent(){
