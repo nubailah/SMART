@@ -9,15 +9,29 @@
 body{
 font-family:Arial;
 background:linear-gradient(135deg,#5f6bdc,#8b5bbf);
+margin:0;
 padding:40px;
 }
 
+.header{
+color:white;
+margin-bottom:20px;
+}
+
+.header h1{
+margin:0;
+}
+
 .container{
-max-width:1000px;
+max-width:1100px;
 margin:auto;
+}
+
+.card{
 background:white;
-padding:30px;
+padding:25px;
 border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
 }
 
 .tabs{
@@ -30,10 +44,10 @@ margin-bottom:20px;
 padding:10px 20px;
 background:#eee;
 cursor:pointer;
-border-radius:6px;
+border-radius:8px;
 }
 
-.active{
+.tab.active{
 background:#4b5bdc;
 color:white;
 }
@@ -42,9 +56,23 @@ color:white;
 display:none;
 }
 
+.form-group{
+margin-bottom:10px;
+}
+
 input{
-padding:8px;
-margin:5px;
+padding:10px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+button{
+background:#4b5bdc;
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:6px;
+cursor:pointer;
 }
 
 table{
@@ -53,10 +81,20 @@ border-collapse:collapse;
 margin-top:20px;
 }
 
+th{
+background:#f3f4f7;
+}
+
 th,td{
 border:1px solid #ddd;
-padding:8px;
+padding:10px;
 text-align:center;
+}
+
+.totalbox{
+margin-top:15px;
+font-size:18px;
+font-weight:bold;
 }
 
 </style>
@@ -65,33 +103,41 @@ text-align:center;
 
 <body>
 
+<div class="header">
+<h1>SMARTGrade Planner System</h1>
+<p>Student Target vs Actual Assessment Analyzer</p>
+</div>
+
 <div class="container">
 
-<h2>SMARTGrade Planner System</h2>
+<div class="card">
 
 <div class="tabs">
-<div class="tab active" onclick="openTab('planner')">Student Planner</div>
-<div class="tab" onclick="openTab('compare')">Result Comparison</div>
+
+<div class="tab active" onclick="openTab('planner',this)">Student Planner</div>
+<div class="tab" onclick="openTab('compare',this)">Result Comparison</div>
+
 </div>
 
 <div id="planner" class="tabcontent" style="display:block">
 
+<div class="form-group">
 Student ID  
 <input id="studentID">
-
 <button onclick="loadStudent()">Load Student</button>
+</div>
 
-<p>Name: <span id="name"></span></p>
-<p>Class: <span id="class"></span></p>
+<p><b>Name:</b> <span id="name"></span></p>
+<p><b>Class:</b> <span id="class"></span></p>
 
 <table>
 
 <tr>
 <th>Assessment</th>
-<th>Max Mark</th>
-<th>Weight (%)</th>
+<th>Max</th>
+<th>Weight</th>
 <th>Target Mark</th>
-<th>Target % Contribution</th>
+<th>Contribution</th>
 </tr>
 
 <tr>
@@ -128,7 +174,9 @@ Student ID
 
 </table>
 
-<h3>Total Target Mark: <span id="totalTarget">0</span></h3>
+<div class="totalbox">
+Total Target Mark: <span id="totalTarget">0</span>
+</div>
 
 </div>
 
@@ -168,19 +216,27 @@ Student ID
 
 </table>
 
-<h3>Total Actual Mark: <span id="totalActual">0</span></h3>
+<div class="totalbox">
+Total Actual Mark: <span id="totalActual">0</span>
+</div>
+
+</div>
 
 </div>
 
 </div>
 
 <script>
-var url=https://script.google.com/macros/s/AKfycbxpP2dvTGSn9QxZxsXn8-9-ig8vRT-LG-tigsmIercBZpjmIJiQYd4EK-kgAYLSftrFhQ/exec;
-function openTab(tab){
+
+var url="https://script.google.com/macros/s/AKfycbxpP2dvTGSn9QxZxsXn8-9-ig8vRT-LG-tigsmIercBZpjmIJiQYd4EK-kgAYLSftrFhQ/exec";
+
+function openTab(tab,el){
 
 document.querySelectorAll(".tabcontent").forEach(x=>x.style.display="none")
+document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"))
 
 document.getElementById(tab).style.display="block"
+el.classList.add("active")
 
 }
 
@@ -197,8 +253,11 @@ let weight=document.getElementById("perA"+i).innerText
 let res=(target/max)*weight
 
 if(!isNaN(res)){
+
 document.getElementById("resA"+i).innerText=res.toFixed(2)
+
 total+=res
+
 }
 
 }
@@ -206,7 +265,7 @@ total+=res
 document.getElementById("totalTarget").innerText=total.toFixed(2)
 
 }
-  
+
 function loadStudent(){
 
 var id=document.getElementById("studentID").value
@@ -235,35 +294,7 @@ document.getElementById("perA4").innerText=data[21]
 })
 
 }
-function saveTarget(){
 
-var data={
-
-id:document.getElementById("studentID").value,
-
-A1:document.getElementById("targetA1").value,
-
-A2:document.getElementById("targetA2").value,
-
-A3:document.getElementById("targetA3").value,
-
-A4:document.getElementById("targetA4").value
-
-}
-
-fetch(url,{
-
-method:"POST",
-
-body:JSON.stringify(data)
-
-})
-
-.then(res=>res.text())
-
-.then(res=>alert("Saved"))
-
-}  
 </script>
 
 </body>
