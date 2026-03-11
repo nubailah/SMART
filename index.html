@@ -37,12 +37,13 @@ th,td{border:1px solid #ddd;padding:10px;text-align:center;}
 <div class="tab" onclick="openTab('compare',this)">Result Comparison</div>
 </div>
 
+<!-- Student Planner Tab -->
 <div id="planner" class="tabcontent" style="display:block">
 <div class="form-group">
-Student ID  
-<input id="studentID">
+Student ID: <input id="studentID">
 <button onclick="loadStudent()">Load Student</button>
 <button onclick="saveTarget()">Save Target</button>
+<button onclick="clearAll()">Clear All</button>
 </div>
 
 <p><b>Name:</b> <span id="name"></span></p>
@@ -61,6 +62,7 @@ Total Target Marks: <span id="totalTarget">0</span> | Total Target %: <span id="
 </div>
 </div>
 
+<!-- Result Comparison Tab -->
 <div id="compare" class="tabcontent">
 <table>
 <tr><th>Assessment</th><th>Actual Mark</th><th>Actual %</th><th>Target Mark</th><th>Target %</th></tr>
@@ -80,15 +82,16 @@ Total Target Marks: <span id="totalTargetComp">0</span> | Total Target %: <span 
 </div>
 
 <script>
-var url="https://script.google.com/macros/s/AKfycbyRwjljPSG-dxFb7KiZSVixpgh55PaVZazfO63rnfeKQQtu2suHAQX0B8ngFOgLntbp2Q/exec";
+var url="https://script.google.com/macros/s/AKfycbwZ3wmlXfotXgH6b5pSbNLnLOg81BeOGVbl0RkVXbZF1iTiyNCWitnQcqQHBTkhUMm82Q/exec";
 
 function openTab(tab,el){
-  document.querySelectorAll(".tabcontent").forEach(x=>x.style.display="none");
-  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-  document.getElementById(tab).style.display="block";
-  el.classList.add("active");
+  document.querySelectorAll(".tabcontent").forEach(x=>x.style.display="none")
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"))
+  document.getElementById(tab).style.display="block"
+  el.classList.add("active")
 }
 
+// Calculate Target % in Planner Tab
 function calcTarget(){
   let total=0, totalPct=0;
   for(let i=1;i<=4;i++){
@@ -104,26 +107,29 @@ function calcTarget(){
   document.getElementById("totalTargetPct").innerText=totalPct.toFixed(2);
 }
 
+// Calculate Actual % in Compare Tab
 function calcActual(){
   let totalActual=0,totalActualPct=0,totalTarget=0,totalTargetPct=0;
   for(let i=1;i<=4;i++){
     let actual=parseFloat(document.getElementById("actualA"+i).innerText)||0;
-    let target=parseFloat(document.getElementById("targetA"+i).value)||0;
+    let target=parseFloat(document.getElementById("targetCompA"+i).innerText)||0;
     let max=parseFloat(document.getElementById("maxA"+i).innerText)||1;
     let weight=parseFloat(document.getElementById("perA"+i).innerText)||0;
+
     let actualPct=(actual/max)*weight;
     let targetPct=(target/max)*weight;
+
     document.getElementById("actualPctA"+i).innerText=actualPct.toFixed(2);
     document.getElementById("targetPctA"+i).innerText=targetPct.toFixed(2);
-    document.getElementById("targetCompA"+i).innerText=target;
+
+    // Color-code
+    let cell=document.getElementById("actualPctA"+i);
+    cell.className = actualPct>=targetPct?"correct":"wrong";
+
     totalActual+=actual;
     totalActualPct+=actualPct;
     totalTarget+=target;
     totalTargetPct+=targetPct;
-
-    // Color coding
-    let td=document.getElementById("actualPctA"+i);
-    td.className=(actualPct>=targetPct)?"correct":"wrong";
   }
   document.getElementById("totalActual").innerText=totalActual.toFixed(2);
   document.getElementById("totalActualPct").innerText=totalActualPct.toFixed(2);
@@ -131,52 +137,58 @@ function calcActual(){
   document.getElementById("totalTargetCompPct").innerText=totalTargetPct.toFixed(2);
 }
 
+// Load Student
 function loadStudent(){
   var id=document.getElementById("studentID").value;
   fetch(url+"?id="+id)
     .then(res=>res.json())
     .then(data=>{
-      if(data.length==0){ alert("Incorrect ID"); return; }
+      if(data.length==0){ alert("Incorrect ID"); clearAll(); return; }
 
-      // Nama & Class
-      document.getElementById("name").innerText=data[2]; // Column C
-      document.getElementById("class").innerText=data[0]; // Column A
+      document.getElementById("name").innerText=data[2];
+      document.getElementById("class").innerText=data[0];
 
-      // Assessments Name
-      document.getElementById("assess1").innerText=data[3]; // D
-      document.getElementById("assess2").innerText=data[8]; // I
-      document.getElementById("assess3").innerText=data[13]; // N
-      document.getElementById("assess4").innerText=data[18]; // S
+      document.getElementById("assess1").innerText=data[3]; 
+      document.getElementById("assess2").innerText=data[8]; 
+      document.getElementById("assess3").innerText=data[13]; 
+      document.getElementById("assess4").innerText=data[18]; 
 
-      // Max
-      document.getElementById("maxA1").innerText=data[5];   // F
-      document.getElementById("maxA2").innerText=data[10];  // K
-      document.getElementById("maxA3").innerText=data[15];  // P
-      document.getElementById("maxA4").innerText=data[20];  // U
+      document.getElementById("cA1").innerText=data[3];
+      document.getElementById("cA2").innerText=data[8];
+      document.getElementById("cA3").innerText=data[13];
+      document.getElementById("cA4").innerText=data[18];
 
-      // Weight
-      document.getElementById("perA1").innerText=data[6];   // G
-      document.getElementById("perA2").innerText=data[11];  // L
-      document.getElementById("perA3").innerText=data[16];  // Q
-      document.getElementById("perA4").innerText=data[21];  // V
+      document.getElementById("maxA1").innerText=data[5];
+      document.getElementById("maxA2").innerText=data[10];
+      document.getElementById("maxA3").innerText=data[15];
+      document.getElementById("maxA4").innerText=data[20];
 
-      // Actual
-      document.getElementById("actualA1").innerText=data[7];   // H
-      document.getElementById("actualA2").innerText=data[12];  // M
-      document.getElementById("actualA3").innerText=data[17];  // R
-      document.getElementById("actualA4").innerText=data[22];  // W
+      document.getElementById("perA1").innerText=data[6];
+      document.getElementById("perA2").innerText=data[11];
+      document.getElementById("perA3").innerText=data[16];
+      document.getElementById("perA4").innerText=data[21];
 
-      // Target
-      document.getElementById("targetA1").value=data[4];   // E
-      document.getElementById("targetA2").value=data[9];   // J
-      document.getElementById("targetA3").value=data[14];  // O
-      document.getElementById("targetA4").value=data[19];  // T
+      document.getElementById("actualA1").innerText=data[7];
+      document.getElementById("actualA2").innerText=data[12];
+      document.getElementById("actualA3").innerText=data[17];
+      document.getElementById("actualA4").innerText=data[22];
+
+      document.getElementById("targetA1").value=data[4];
+      document.getElementById("targetA2").value=data[9];
+      document.getElementById("targetA3").value=data[14];
+      document.getElementById("targetA4").value=data[19];
+
+      // Compare tab Target
+      for(let i=1;i<=4;i++){
+        document.getElementById("targetCompA"+i).innerText=document.getElementById("targetA"+i).value;
+      }
 
       calcTarget();
       calcActual();
     });
 }
 
+// Save Target
 function saveTarget(){
   var payload={
     id:document.getElementById("studentID").value,
@@ -190,13 +202,32 @@ function saveTarget(){
     body:JSON.stringify(payload)
   })
   .then(res=>res.json())
-  .then(resp=>{
-    if(resp.ok) alert("Saved successfully");
-    else alert("Failed to save: "+resp.message);
-  })
-  .catch(err=>alert("Failed to save: "+err.message));
+  .then(resp=>{ resp.ok ? alert("Saved successfully") : alert("Failed: "+resp.message); })
+  .catch(err=>alert("Failed: "+err.message));
+}
+
+// Clear all fields
+function clearAll(){
+  for(let i=1;i<=4;i++){
+    document.getElementById("targetA"+i).value="";
+    document.getElementById("resA"+i).innerText="0";
+    document.getElementById("maxA"+i).innerText="0";
+    document.getElementById("perA"+i).innerText="0";
+    document.getElementById("assess"+i).innerText="";
+    document.getElementById("cA"+i).innerText="";
+    document.getElementById("actualA"+i).innerText="0";
+    document.getElementById("actualPctA"+i).innerText="0";
+    document.getElementById("targetCompA"+i).innerText="0";
+    document.getElementById("targetPctA"+i).innerText="0";
+    document.getElementById("actualPctA"+i).className="";
+  }
+  document.getElementById("totalTarget").innerText="0";
+  document.getElementById("totalTargetPct").innerText="0";
+  document.getElementById("totalActual").innerText="0";
+  document.getElementById("totalActualPct").innerText="0";
+  document.getElementById("totalTargetComp").innerText="0";
+  document.getElementById("totalTargetCompPct").innerText="0";
 }
 </script>
-
 </body>
 </html>
