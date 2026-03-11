@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+font-family:Arial;
+background:linear-gradient(135deg,#5f6bdc,#8b5bbf);
+padding:40px;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+background:white;
+padding:30px;
+border-radius:12px;
+}
+
+.tabs{
+display:flex;
+gap:10px;
+margin-bottom:20px;
+}
+
+.tab{
+padding:10px 20px;
+background:#eee;
+cursor:pointer;
+border-radius:6px;
+}
+
+.active{
+background:#4b5bdc;
+color:white;
+}
+
+.tabcontent{
+display:none;
+}
+
+input{
+padding:8px;
+margin:5px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:8px;
+text-align:center;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>SMARTGrade Planner System</h2>
+
+<div class="tabs">
+<div class="tab active" onclick="openTab('planner')">Student Planner</div>
+<div class="tab" onclick="openTab('compare')">Result Comparison</div>
+</div>
+
+<div id="planner" class="tabcontent" style="display:block">
+
+Student ID  
+<input id="studentID">
+
+<button onclick="loadStudent()">Load Student</button>
+
+<p>Name: <span id="name"></span></p>
+<p>Class: <span id="class"></span></p>
+
+<table>
+
+<tr>
+<th>Assessment</th>
+<th>Max Mark</th>
+<th>Weight (%)</th>
+<th>Target Mark</th>
+<th>Target % Contribution</th>
+</tr>
+
+<tr>
+<td>A1</td>
+<td id="maxA1"></td>
+<td id="perA1"></td>
+<td><input id="targetA1" oninput="calcTarget()"></td>
+<td id="resA1"></td>
+</tr>
+
+<tr>
+<td>A2</td>
+<td id="maxA2"></td>
+<td id="perA2"></td>
+<td><input id="targetA2" oninput="calcTarget()"></td>
+<td id="resA2"></td>
+</tr>
+
+<tr>
+<td>A3</td>
+<td id="maxA3"></td>
+<td id="perA3"></td>
+<td><input id="targetA3" oninput="calcTarget()"></td>
+<td id="resA3"></td>
+</tr>
+
+<tr>
+<td>A4</td>
+<td id="maxA4"></td>
+<td id="perA4"></td>
+<td><input id="targetA4" oninput="calcTarget()"></td>
+<td id="resA4"></td>
+</tr>
+
+</table>
+
+<h3>Total Target Mark: <span id="totalTarget">0</span></h3>
+
+</div>
+
+<div id="compare" class="tabcontent">
+
+<table>
+
+<tr>
+<th>Assessment</th>
+<th>Actual Mark</th>
+<th>Contribution</th>
+</tr>
+
+<tr>
+<td>A1</td>
+<td id="actualA1"></td>
+<td id="actualResA1"></td>
+</tr>
+
+<tr>
+<td>A2</td>
+<td id="actualA2"></td>
+<td id="actualResA2"></td>
+</tr>
+
+<tr>
+<td>A3</td>
+<td id="actualA3"></td>
+<td id="actualResA3"></td>
+</tr>
+
+<tr>
+<td>A4</td>
+<td id="actualA4"></td>
+<td id="actualResA4"></td>
+</tr>
+
+</table>
+
+<h3>Total Actual Mark: <span id="totalActual">0</span></h3>
+
+</div>
+
+</div>
+
+<script>
+
+function openTab(tab){
+
+document.querySelectorAll(".tabcontent").forEach(x=>x.style.display="none")
+
+document.getElementById(tab).style.display="block"
+
+}
+
+function calcTarget(){
+
+let total=0
+
+for(let i=1;i<=4;i++){
+
+let target=document.getElementById("targetA"+i).value
+let max=document.getElementById("maxA"+i).innerText
+let weight=document.getElementById("perA"+i).innerText
+
+let res=(target/max)*weight
+
+if(!isNaN(res)){
+document.getElementById("resA"+i).innerText=res.toFixed(2)
+total+=res
+}
+
+}
+
+document.getElementById("totalTarget").innerText=total.toFixed(2)
+
+}
+
+</script>
+
+</body>
+</html>
