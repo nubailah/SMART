@@ -210,7 +210,7 @@ th,td{
 </div>
 
 <script>
-var url="https://script.google.com/macros/s/AKfycbxfO99A_tHZJyARWczXoa4FVgf28t5I5LOApuhTNgwTqgfutp0gzVqjs1KnnjPRnJu4kA/exec";
+var url="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"; // replace with your actual script URL
 
 // Tabs
 function openTab(tab,el){
@@ -220,46 +220,58 @@ function openTab(tab,el){
   el.classList.add("active");
 }
 
-// Update target contribution
+// Calculate target contribution
 function calcTarget(){
-  let total=0;
+  let total = 0;
   for(let i=1;i<=4;i++){
     let target = parseFloat(document.getElementById("targetA"+i).value) || 0;
     let max = parseFloat(document.getElementById("maxA"+i).innerText) || 0;
     let weight = parseFloat(document.getElementById("perA"+i).innerText) || 0;
-    let res = max > 0 ? (target/max)*weight : 0;
+    let res = max>0 ? (target/max)*weight : 0;
     document.getElementById("resA"+i).innerText = res.toFixed(2);
     total += res;
   }
   document.getElementById("totalTarget").innerText = total.toFixed(2);
+  document.getElementById("totalCompTarget").innerText = total.toFixed(2);
 }
 
-// Update actual contribution
+// Calculate actual contribution
 function calcActual(){
   let total=0;
   for(let i=1;i<=4;i++){
     let actual = parseFloat(document.getElementById("actualA"+i).innerText) || 0;
     let max = parseFloat(document.getElementById("maxA"+i).innerText) || 0;
     let weight = parseFloat(document.getElementById("perA"+i).innerText) || 0;
-    let res = max > 0 ? (actual/max)*weight : 0;
+    let res = max>0 ? (actual/max)*weight : 0;
     document.getElementById("compResActualA"+i).innerText = res.toFixed(2);
     total += res;
   }
   document.getElementById("totalCompActual").innerText = total.toFixed(2);
 }
 
-// Update comparison tab when target changes
+// Color code actual marks
+function colorCodeComparison(){
+  for(let i=1;i<=4;i++){
+    let target = parseFloat(document.getElementById("targetA"+i).value) || 0;
+    let actual = parseFloat(document.getElementById("actualA"+i).innerText) || 0;
+    let td = document.getElementById("actualA"+i);
+    td.style.backgroundColor = actual >= target ? "#c8e6c9" : "#ffcdd2";
+  }
+}
+
+// Update comparison when target changes
 function updateComparison(){
   calcTarget();
   for(let i=1;i<=4;i++){
-    document.getElementById("compTargetA"+i).innerText = document.getElementById("targetA"+i).value || 0;
     let target = parseFloat(document.getElementById("targetA"+i).value) || 0;
     let max = parseFloat(document.getElementById("maxA"+i).innerText) || 0;
     let weight = parseFloat(document.getElementById("perA"+i).innerText) || 0;
-    let res = max > 0 ? (target/max)*weight : 0;
+    let res = max>0 ? (target/max)*weight : 0;
+    document.getElementById("compTargetA"+i).innerText = target;
     document.getElementById("compResTargetA"+i).innerText = res.toFixed(2);
   }
   calcActual();
+  colorCodeComparison();
 }
 
 // Load student data
@@ -268,7 +280,11 @@ function loadStudent(){
   fetch(url + "?id=" + id)
   .then(res => res.json())
   .then(data => {
-    // Dynamic names
+    if(!data || data.length==0){
+      alert("Incorrect ID. Student not found!");
+      return;
+    }
+    // Populate assessment names
     document.getElementById("assess1").innerText = data[3];
     document.getElementById("assess2").innerText = data[8];
     document.getElementById("assess3").innerText = data[13];
@@ -320,14 +336,21 @@ function saveTarget(){
     targetA3: document.getElementById("targetA3").value,
     targetA4: document.getElementById("targetA4").value
   };
-  fetch(url, {
-    method: "POST",
+  fetch(url,{
+    method:"POST",
     body: JSON.stringify(payload),
-    headers: {"Content-Type": "application/json"}
+    headers: {"Content-Type":"application/json"}
   })
-  .then(res => res.json())
-  .then(data => alert("Target marks saved successfully!"))
-  .catch(err => alert("Failed to save target marks."));
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.ok){
+      alert("Target marks saved successfully!");
+      updateComparison();
+    } else {
+      alert("Error: "+data.message);
+    }
+  })
+  .catch(err => alert("Failed to save target marks. Check network or script permissions."));
 }
 </script>
 
